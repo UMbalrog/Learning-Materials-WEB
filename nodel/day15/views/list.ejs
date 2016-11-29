@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		ul li{
+			list-style: none;
+		}
+	</style>
+</head>
+<body>
+	<ul>
+	<%for(var i=0;i<data.length; i++){%>
+		<li><%=data[i].xh%>&nbsp;<%=data[i].xm%>&nbsp;<%=data[i].nl%>&nbsp;<%=data[i].cj%></li>
+	<%}%>
+	</ul>
+</body>
+</html>

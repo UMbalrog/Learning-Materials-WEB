@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<form action="">
+		<input type="text">
+	</form>
+	<button id="btn">getjsonp</button>
+</body>
+	<script src="/jquery-3.1.1.js"></script>
+	<script>
+		$("#btn").on("click",function(){
+			$.getJSON("http://localhost:3022/user",function(res){
+				console.log(res);
+			})
+		})
+	</script>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style>
+		ul li{
+			width: 30px;
+			height: 20px;
+			margin: 10px;
+			background: red;
+		}
+		ul li:hover{
+			background: url("images/a.jpg") ;
+		}
+
+	</style>
+</head>
+<body>
+	<ul>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+		<li>1</li>
+	</ul>
+
+	<div>
+		<p><label for="">用户名</label><input id="usename" type="text"></p>
+		<p><label for="">密码</label><input id="password" type="password"></p>
+		<input id="submit" type="submit" value="登录">
+	</div>
+	<script>
+		var usename=document.getElementById('usename');
+		var password=document.getElementById('password');
+		var submit=document.getElementById('submit');
+		/*//json从数据库中获取
+		if(window.XMLHttpRequest){
+			var xml=new XMLHttpRequest();
+		}else{
+			var xml=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		//使用get提交
+		xml.open("get","a.php?name=11",true);
+		xml.send(null);
+		//使用post提交
+		xml.open("post","a.php",true);
+		xml.setRequestHeader("content-type","application/x-www-form-urlencoded");
+		xml.send("name=123");//post传参
+
+		
+		xml.onreadystatechang=function(){
+			if(xml.readyState==4 && xml.status==200){
+				var json=xml.responseText;
+				console.log(json);
+			}
+		}
+
+		var json=[	{
+						"name":"zs",
+						"mima":"123"//密码暂时写这样在数据库中会加密
+					},
+					{
+						"name":"li",
+						"mima":"123"
+					},
+					{
+						"name":"li",
+						"mima":"123"
+					}
+				];
+		submit.onclick=function(){
+			json.forEach(function(v){
+				if(v["name"]==usename.value && v["mima"]==password.value){
+					
+					alert(usename.value+"登录成功");
+				}else{
+					alert("密码或用户名错误");
+				}
+			})
+			
+		}*/
+	</script>
+</body>
+</html>

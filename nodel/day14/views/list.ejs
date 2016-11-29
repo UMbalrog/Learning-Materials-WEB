@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%=title%></title>
+	<script src="/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+	list.页面
+	<% data.forEach(function(val){ %>
+		<p><%=val.name+val.age %></p>
+	<% }) %>
+
+	<button id="btn">get</button>
+</body>
+	<script>
+		$("#btn").on("click",function(){
+			$.ajax({
+				url:"/userlist",
+				type:"post",
+				success:function(data){
+					$("body").append($("<p></p>").html(data));
+					console.log(data);
+				}
+			})
+		})
+	</script>
+</html>
+

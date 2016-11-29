@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src='/socket.io/socket.io.js'></script>
+	<style>
+		*{margin: 0;padding: 0;list-style: none;}
+		.wrap{width: 450px; height: 400px;margin: 10px auto;}
+		#box{width: 400px;height: 200px;border: 2px solid #ccc;box-shadow:6px 4px #ccc; }
+		.set{margin: 10px 0;}
+	</style>
+</head>
+<body>
+	<div class='wrap'>
+		<div id='box'></div>
+		<div class="set">
+			<input type="color" id='col'>
+			<button id='clear'>清空</button>
+			<button id='img'>图片</button>
+			<button id='face'>表情</button>
+		</div>
+		<div class='content'>
+			<button id='but'>send</button>
+			<input type="text" id='text'>
+		</div>
+	</div>
+	
+	<script>
+	var text=document.getElementById("text");
+	var but=document.getElementById("but");
+	var box=document.getElementById("box");
+	var col=document.getElementById("col");
+	var clear=document.getElementById("clear");
+	var img=document.getElementById("img");
+	var face=document.getElementById("face");
+	
+	var ser=io.connect("http://localhost:3001");
+	var str='';
+	var bg="#000";
+	//改变颜色
+	col.onchange=function(){
+		bg=col.value;
+	}
+	//点击发送消息
+	but.onclick=function(){
+		var val="<span style='color:"+bg+"'>"+text.value+"</span>"
+		ser.emit("mes",val);
+	}	
+	ser.on("send",function(data){
+		str=str+data+"</br>";
+		box.innerHTML=str;
+		text.value='';
+	})
+	//清空聊天记录
+	clear.onclick=function(){
+		box.innerHTML="";
+		str="";
+	}
+	//发送图片
+	img.onclick=function(){
+		
+	}
+	
+
+	</script>
+</body>
+</html>

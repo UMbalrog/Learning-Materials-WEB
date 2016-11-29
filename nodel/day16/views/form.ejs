@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	 <!--<form action="http://localhost:3022/user" method="post">
+		<p><label for="">账户</label><input id="xm" type="text" name="xm"></p>
+		<p><label for="">密码</label><input id="nl" type="password" name="nl"></p>
+		<p><input type="submit" value="sub"></p>	
+	</form>-->
+
+		
+	<div id="div">
+		<p><label for="">账户</label><input id="xm" type="text" name="xm"></p>
+		<p><label for="">密码</label><input id="nl" type="password" name="nl"></p> 
+		<button id="btn">getjsonp</button>
+
+
+	</div>
+</body>
+	<script src="/jquery-2.1.1.js"></script>
+	<script>
+		$("#btn").on("click",function(){
+			var names=$("#xm").val();
+			var age=$("#nl").val();
+			//第一种$.getJSON();
+			/*$.getJSON("http://localhost:3022/user?callback=?",{"xm":names,"nl":age},function(res){
+				console.log(res);
+				$("#div").html(res);
+			})*/
+
+			// 当使用post提交不能用于jsonp传送，系统会自动转为get  所以即使用post提交接收方也一定用get接收
+			//第二种$.ajax;
+			$.ajax({
+				type:"POST",
+				url:"http://localhost:3022/user",
+				data:{"xm":names,"nl":age},
+				dataType:"jsonp",
+				success:function(res){
+					if(res){
+						/*var str="<div>"
+								+"<p>登录成功"
+							+"</div>"
+						$("<p></p>").html();*/
+
+
+						$("#div").html("登录成功");
+					}else{
+						$("#div").html("登录失败");
+					}
+					
+				}
+			})
+
+		})
+	</script>
+</html>

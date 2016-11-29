@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<style>
+		*{
+			padding:0;
+			margin:0;
+			list-style: none;
+		}
+		.wrap{
+			padding-top: 10px;
+			padding-left: 10px;
+			width: 500px;
+			height: 400px;
+			background: #eee;
+		}
+		#login{
+			width: 500px;
+			height: 200px;
+			margin-top: 100px;
+			text-align: center;
+		}
+		#login p{
+			margin:20px 0 ;
+		}
+		.box0{
+			width: 380px;
+			height: 270px;
+			overflow: scroll;
+			background: #fff;
+			margin-right: 10px;
+			float: left;
+		}
+		.box3{
+			float: left;
+			width: 95px;
+			height: 270px;
+			background: #fff;
+		}
+		#my{
+			width: 360px;
+			height: auto;
+		}
+		.box1{
+			float: left;
+			margin: 10px 0;
+			position: relative;
+		}
+		.face{
+			width: 400px;
+			height: 200px;
+			position: absolute;
+			background: url("./faces/facesquan.bmp") no-repeat;
+			left:1px;
+			top:-202px;
+			display: none;
+		}
+		.face ul li{
+			width: 24px;
+			height: 24px;
+			float: left;
+			background: red;
+			opacity: 0.1;
+			margin: 1px 0 0 1px;
+			cursor: pointer;
+		}
+		.face2{
+			width: 400px;
+			height: 160px;
+			background: #fff;
+			position: absolute;
+			left:10px;
+			top:-175px;
+			display: none;
+		}
+		.face2 img{
+			margin: 0;
+			padding: 0;
+		}
+		.box2{
+			float: left;
+		}
+		#btn{
+			width: 40px;
+			height: 60px;
+		}
+		#textarea{
+			float: left;
+			margin-right: 10px;
+		}
+		.show{
+			display:block;
+		}
+		.hidden{
+			display:none;
+		}
+		#myfile{
+			width:100px;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class="wrap">
+		<div id="login">
+			<h2>欢迎加入我们！</h2>
+			<p><label for=""></label><input type="text" id="txt" required placeholder="请输入您的名字"></p>
+			<p><input type="button" id="logbtn" value="注册"></p>
+			<p id="pp"></p>
+		</div>
+		<div id="liao" class="hidden">
+			<div id="box0" class="box0">
+				<div id="my"></div>
+			</div>
+			<div class="box3">
+				<h3>聊天成员</h3>
+				<ul id="uls">
+					
+				</ul>
+			</div>
+			<div class="box1">
+				<input type="color" id="colors">
+				<input type="file" id="myfile" value="
+				发送文件">	
+				<input type="button" id="facebtn" value="表情1">
+				<div id="face" class="face">
+					<ul id="ulli">
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+					</ul>
+				</div>
+				<input type="button" id="facebtn2" value="表情2">
+				<div id="face2" class="face2">
+					
+				</div>
+				<input type="button" value="clear" id="clear">
+				<span id="span"></span>
+			</div>
+			<div class="box2">
+				<textarea name="textarea" id="textarea" cols="60" rows="5" placeholder="请输入聊天信息"></textarea>
+				<button id="btn">send</button>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	var socket = null,bg = null;
+	socket = io.connect( "http://172.23.69.34:3000" );
+	var btn = document.getElementById( 'btn' ),
+		txt = document.getElementById( 'txt' ),
+		box0 = document.getElementById( 'box0' ),
+		clear = document.getElementById( 'clear' ),
+		logbtn = document.getElementById( 'logbtn' ),
+		login = document.getElementById( "login" ),
+		liao = document.getElementById( "liao" ),
+		uls = document.getElementById( "uls" ),
+		ulli = document.getElementById( "ulli" ),
+		lis = ulli.children;//ul下所有的li
+		pp = document.getElementById( "pp" ),
+		face = document.getElementById( "face" ),
+		face2 = document.getElementById( "face2" ),
+		span = document.getElementById( "span" ),
+		facebtn = document.getElementById( "facebtn" ),
+		facebtn2 = document.getElementById( "facebtn2" ),
+		my = document.getElementById( 'my' ),
+		textarea = document.getElementById( 'textarea' ),
+		myfile = document.getElementById( 'myfile' ),
+		colors = document.getElementById( 'colors' );
+
+	//使滚动条一直在底部	
+	setInterval(function(){
+		box0.scrollTop = box0.scrollHeight;	
+	},100)
+	
+	//文字颜色选择
+	colors.onchange = function() {
+		bg = this.value;
+	}
+
+	//发送图片
+	myfile.onchange = function() {	
+		var fileCont = this.files.length;
+		if( fileCont > 0) {
+			var fr = new FileReader();
+			fr.readAsDataURL(this.files[0]);//读取文件
+			fr.onload = function() {
+				console.log(this.result);
+				socket.emit("img",this.result);
+			}
+		}
+	}
+
+	//接收图片
+	socket.on("pic",function (user,data) {	
+		var Img = document.createElement("img");
+		Img.style.width = "300px";
+		Img.src = data;
+		my.innerHTML += user+"说：</br>";
+		my.appendChild(Img);
+		my.innerHTML += "</br>";
+	})
+
+	//点击表情1
+	facebtn.onclick = function() { 
+		if(face.style.display == "block") {
+			face.style.display = "none";
+		} else {
+			face.style.display = "block";
+		}
+	}
+	//点击表情2
+	facebtn2.onclick = function() { 
+		if(face2.style.display == "block") {
+			face2.style.display = "none";
+		} else {
+			face2.style.display = "block";
+		}
+	}
+
+	//添加表情
+	for(var j=1;j<=40;j++){
+		var Pic = document.createElement("img");
+		Pic.src = "/faces/t_00"+j+".gif";
+		face2.appendChild(Pic);
+		Pic.index = j;
+		Pic.onclick = function() {
+			textarea.value += "[t_00"+this.index+".gif]";
+			face2.style.display = "none";
+		}
+	}
+
+	//发送表情
+	for(var i=0; i<lis.length;i++){ 
+		lis[i].index = i;
+		lis[i].onclick = function () {
+			//socket.emit("face",this.index+1);
+			textarea.value += "@@"+(this.index+1);
+			face.style.display = "none";
+		}	
+	}
+
+	//表情接收
+	/*socket.on("faces",function(user,data) {
+		var Img = document.createElement("img");
+		Img.src = "./faces/"+data+".gif";
+		my.innerHTML += user+"说：</br>";
+		my.appendChild(Img);
+		my.innerHTML += "</br>";
+	})*/
+
+	//登录按钮
+	logbtn.onclick = function() {
+		socket.emit("login",txt.value);
+	}
+
+	//清空按钮
+	clear.onclick = function (){
+		my.innerHTML = "";
+	}
+
+	//登录接收处
+	socket.on("res",function(data,len) { 
+		login.className = "hidden";
+		liao.className = "show";
+		my.innerHTML += data+"</br>";
+		textarea.focus = true;
+	})
+
+	//人数接收处
+	socket.on("xx",function(data) {	
+		var lens = data.length;
+		span.innerHTML = "当前在线"+lens+"人";
+		var str = "";
+		for(var i=0; i<lens; i++) { //成员列表
+			str += "<li>"+data[i]+"</li>";
+		}
+		uls.innerHTML = str;
+	})
+
+	//用户名已存在
+	socket.on("yy",function(data) { 
+		pp.innerHTML = data;
+	})
+
+	//键盘点击回车事件
+	textarea.onkeydown = function(event) { 
+		var e = window.event || event;
+		if(e.keyCode === 13) {
+			sends();
+			//scrolls();
+			return false;
+		}
+	}
+	txt.onkeydown = function(event) {
+		var e = window.event || event;
+		if(e.keyCode === 13) {
+			socket.emit("login",txt.value);
+			return false;
+		}
+	}
+
+	//聊天发送处
+	btn.onclick = function() { 
+		sends();
+	}
+
+	//聊天接收处
+	socket.on( "ser" ,function(data) { 
+		//判断表情
+		data = getdata(data);
+		my.innerHTML += data+"</br>";
+	})
+
+	function getdata(sum){
+		//表情2的替换
+		var reg = /\[t_00(\d){1,2}\.gif\]/g
+		sum = sum.replace(reg,function(b) {  //(RegExp.$2)
+			return "<img src='./faces/t_00"+b.slice(5,-1)+"' alt=''>";
+		})
+		//表情1的替换
+		var reg = /@@(\d){1,2}/g;
+		sum = sum.replace(reg,function(a) {
+			return "<img src='./faces/"+a.split("@@")[1]+".gif' alt=''>";
+		})
+
+		return sum;
+	}
+
+
+	function sends(){
+		if( textarea.value === "" ) {
+			alert("发送不能为空！");
+			return false;
+		} else {
+			var str = "<span style = 'color:"+bg+"'>"+textarea.value+"</span>";
+			socket.emit( "chat",str );
+		}
+		textarea.value = "";
+		textarea.placeholder = "";
+	}
+
+</script>
+</html>

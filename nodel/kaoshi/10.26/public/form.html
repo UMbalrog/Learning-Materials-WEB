@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<script>
+		var socket = null;
+		socket = io.connect("http://localhost:3000");
+		socket.emit("coming","进入");
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="./socket.io/socket.io.js"></script>
+</head>
+<body>
+	<script>
+	  var s= io.connect("http://localhost:800");
+	  s.on("aaa",function(data){
+	  	     alert(data);
+	  		s.emit("eee","eee eeee");
+	  })
+	</script>
+</body>
+</html>
